@@ -15,5 +15,12 @@
 	    	android:text="Test"
 	    	android:onClick="buttonPressed"
 	    	android:layout_marginTop="5dp" />
+	    <Button
+	        android:id="@+id/buttonTwo"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:text="playGame"
+	    	android:onClick="playGame"
+	    	android:layout_marginTop="5dp" />
 </LinearLayout>
 </RelativeLayout>

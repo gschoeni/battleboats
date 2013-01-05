@@ -1,6 +1,7 @@
 package com.gregschoeninger.battleboats;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,7 +22,12 @@ public class MainActivity extends Activity {
     }
     
     public void buttonPressed(View view) {        
-    	Log.d("Test", "TEST");
+    	Log.d(Battleboats.DEBUG_TAG, "TEST");
     	
+    }
+    
+    public void playGame(View view) {        
+    	Intent i = new Intent(this, Battleboats.class);
+    	startActivity(i);
     }
 }

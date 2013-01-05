@@ -37,6 +37,10 @@ public class GameRenderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		batcher.beginBatch(Assets.background);
 		
+		batcher.drawSprite(cam.position.x, cam.position.y,
+                FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 
+                Assets.backgroundRegion);
+		
 		batcher.endBatch();
 	}
 	
@@ -47,8 +51,7 @@ public class GameRenderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         batcher.beginBatch(Assets.foregroundItems);
         
-        
-        
+        batcher.drawSprite(10, 10, 50, 50, Assets.boat);
         
         batcher.endBatch();
         gl.glDisable(GL10.GL_BLEND);

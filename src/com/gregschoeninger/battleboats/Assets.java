@@ -10,7 +10,7 @@ public class Assets {
     public static TextureRegion backgroundRegion;
     
     public static Texture foregroundItems;
-	
+    public static TextureRegion boat;
     
     // Suppress default constructor for noninstantiability
     private Assets() {
@@ -18,7 +18,11 @@ public class Assets {
     }
     
     public static void load(GLGame game) {
-    	background = new Texture(game, "waffle.png");
+    	background = new Texture(game, "battleboats-sprites.png");
+    	backgroundRegion = new TextureRegion(background, 150, 0, 150, 150);
+    	
+    	foregroundItems = new Texture(game, "battleboats-sprites.png");
+    	boat = new TextureRegion(foregroundItems, 0, 0, 150, 150);
     }
 
     public static void reload() {

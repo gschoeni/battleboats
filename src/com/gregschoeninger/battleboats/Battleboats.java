@@ -9,7 +9,7 @@ import com.badlogic.androidgames.framework.impl.GLGame;
 
 public class Battleboats extends GLGame {
 	boolean firstTimeCreate = true;
-	public static final String DEBUG_TAG = "WordWaffle";
+	public static final String DEBUG_TAG = "BattleBoats";
 
 	@Override
 	public Screen getStartScreen() {

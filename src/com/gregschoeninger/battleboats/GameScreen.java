@@ -23,6 +23,7 @@ public class GameScreen extends GLScreen {
 		super(game);
 		guiCam = new Camera2D(glGraphics, 320, 480);
 		batcher = new SpriteBatcher(glGraphics, 1000);
+		renderer = new GameRenderer(glGraphics, batcher);
 	}
 
 	@Override
