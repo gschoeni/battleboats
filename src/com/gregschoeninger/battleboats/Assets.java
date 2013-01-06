@@ -11,6 +11,7 @@ public class Assets {
     
     public static Texture foregroundItems;
     public static TextureRegion boat;
+    public static TextureRegion square;
     
     // Suppress default constructor for noninstantiability
     private Assets() {
@@ -23,6 +24,7 @@ public class Assets {
     	
     	foregroundItems = new Texture(game, "battleboats-sprites.png");
     	boat = new TextureRegion(foregroundItems, 0, 0, 150, 150);
+    	square = new TextureRegion(foregroundItems, 300, 0, 150, 150);
     }
 
     public static void reload() {

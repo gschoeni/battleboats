@@ -17,13 +17,15 @@ public class GameScreen extends GLScreen {
 	private Camera2D guiCam;
 	private SpriteBatcher batcher;
 	private GameRenderer renderer;
+	private Map map;
 	
 	
 	public GameScreen(Battleboats game) {
 		super(game);
 		guiCam = new Camera2D(glGraphics, 320, 480);
 		batcher = new SpriteBatcher(glGraphics, 1000);
-		renderer = new GameRenderer(glGraphics, batcher);
+		map = new Map();
+		renderer = new GameRenderer(glGraphics, batcher, map);
 	}
 
 	@Override
@@ -81,7 +83,6 @@ public class GameScreen extends GLScreen {
 		//batcher.beginBatch(Assets.foregroundTexture);
 		
 		guiCam.setViewportAndMatrices();
-
 		
 		//batcher.endBatch();
 		gl.glDisable(GL10.GL_BLEND);
