@@ -59,6 +59,7 @@ public class SpeechConverter {
         wordToIndex.put("she", 7);
         wordToIndex.put("see", 7);
         wordToIndex.put("sea", 7);
+        wordToIndex.put("v", 5);
         wordToIndex.put("c", 5);
 
         wordToIndex.put("delta", 4);
@@ -75,6 +76,7 @@ public class SpeechConverter {
         wordToIndex.put("g", 1);
         
         wordToIndex.put("hotel", 0);
+        wordToIndex.put("page", 0);
         wordToIndex.put("h", 0);
     }
 
@@ -88,6 +90,7 @@ public class SpeechConverter {
         numberToIndex.put("seven", 6);
 
         numberToIndex.put("six", 5);
+        numberToIndex.put("sex", 5);
 
         numberToIndex.put("five", 4);
         numberToIndex.put("phi", 4);

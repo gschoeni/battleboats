@@ -11,7 +11,9 @@ import java.util.concurrent.ExecutionException;
 
 import org.json.JSONObject;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
@@ -28,16 +32,12 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);        
         setContentView(R.layout.activity_main);
     	requestAccessToken();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+    	
     }
 
     public void playGame(View view) {   
@@ -67,10 +67,10 @@ public class MainActivity extends Activity {
         
         @Override
         protected String doInBackground(Void... _) {
+        	Log.d(Battleboats.DEBUG_TAG, "starting background...");
             HttpURLConnection oauth = null;
             String token = "?";
             try {
-            	Log.d(Battleboats.DEBUG_TAG, "Fetching access token");
                 oauth = (HttpURLConnection) new URL(OAUTH_TOKEN_URL).openConnection();
                 oauth.setDoOutput(true);
                 oauth.setChunkedStreamingMode(0);
@@ -90,5 +90,6 @@ public class MainActivity extends Activity {
             }
             return token;              
         }
+
     }
 }
