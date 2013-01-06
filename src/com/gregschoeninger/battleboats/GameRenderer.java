@@ -63,7 +63,7 @@ public class GameRenderer {
 //			}
 //		}
 		for(Boat b : map.boats) {
-			batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat);
+			batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.boat);
 		}
 	}
 	
