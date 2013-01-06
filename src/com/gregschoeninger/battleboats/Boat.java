@@ -3,7 +3,6 @@ package com.gregschoeninger.battleboats;
 import java.util.ArrayList;
 
 import com.badlogic.androidgames.framework.GameObject;
-import com.badlogic.androidgames.framework.gl.TextureRegion;
 
 public class Boat extends GameObject {
 	
@@ -20,9 +19,7 @@ public class Boat extends GameObject {
 	public static int IS_BEING_DRAGGED = 1;
 	
 	public Boat(int row, int col, BoatType b, BoatOrientation o) {
-		super(row*GridSpace.WIDTH + Map.x_offset, col*GridSpace.HEIGHT+Map.y_offset, getWidthFromOrientation(b, o), getHeightFromOrientation(b, o));
-		//super(row*GridSpace.WIDTH + Map.x_offset, col*GridSpace.HEIGHT+Map.y_offset, 35, 70);
-		
+		super(row*GridSpace.WIDTH + Map.x_offset, col*GridSpace.HEIGHT+Map.y_offset, GridSpace.WIDTH, GridSpace.HEIGHT);
 		this.boatType = b;
 		this.orientation = o;
 		this.row = row;
@@ -79,26 +76,6 @@ public class Boat extends GameObject {
 	public void setLocation(float x, float y) {
 		position.set(x, y);
     	bounds.setLowerLeft(x, y);
-	}
-	
-	private static int getWidthFromOrientation(BoatType b, BoatOrientation o) {
-		int width;
-		if (o == BoatOrientation.VERTICAL) {
-			width = GridSpace.WIDTH;
-		} else {
-			width = GridSpace.WIDTH * b.size;
-		}
-		return width;
-	}
-	
-	private static int getHeightFromOrientation(BoatType b, BoatOrientation o) {
-		int height;
-		if (o == BoatOrientation.VERTICAL) {
-			height = GridSpace.HEIGHT * b.size;
-		} else {
-			height = GridSpace.HEIGHT;
-		}
-		return height;
 	}
 	
 }

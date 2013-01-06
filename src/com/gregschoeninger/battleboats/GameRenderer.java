@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.badlogic.androidgames.framework.gl.Camera2D;
 import com.badlogic.androidgames.framework.gl.SpriteBatcher;
-import com.badlogic.androidgames.framework.gl.TextureRegion;
 import com.badlogic.androidgames.framework.impl.GLGraphics;
 
 public class GameRenderer {
@@ -61,22 +60,21 @@ public class GameRenderer {
 	
 	private void renderBoats() {
 		for(Boat b : map.boats) {
-            TextureRegion texture;
-            switch(b.boatType.size) {
-                case 2:
-                    texture = Assets.patrol_boat;
-                    break;
-                case 3:
-                    texture = Assets.submarine;
-                    break;
-                case 4:
-                    texture = Assets.destroyer;
-                    break;
-                default:
-                    texture = Assets.aircraft;
-                    break;
-            }   
-			batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, texture);
+			
+			switch(b.boatType.size) {
+				case 2:
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.patrol_boat);
+					break;
+				case 3:
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.submarine);
+					break;
+				case 4:
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.destroyer);
+					break;
+				case 5:
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.aircraft);
+					break;
+			}
 		}
 	}
 	
