@@ -12,13 +12,17 @@ public class Boat extends GameObject {
 	public int col;
 	public BoatType boatType;
 	public BoatOrientation orientation;
+	public int state;
+	public static int VALID_SPACE = 0;
+	public static int IS_BEING_DRAGGED = 1;
 	
 	public Boat(int row, int col, BoatType b, BoatOrientation o) {
-		super(row*GridSpace.WIDTH, col*GridSpace.HEIGHT, GridSpace.WIDTH, GridSpace.HEIGHT);
+		super(row*GridSpace.WIDTH + Map.x_offset, col*GridSpace.HEIGHT+Map.y_offset, GridSpace.WIDTH, GridSpace.HEIGHT);
 		this.boatType = b;
 		this.orientation = o;
 		this.row = row;
 		this.col = col;
+		this.state = VALID_SPACE;
 	}
 	
 	public ArrayList<GridSpace> getGridSpaces() {
@@ -31,6 +35,11 @@ public class Boat extends GameObject {
 			}
 		}
 		return g;
+	}
+	
+	public void setLocation(float x, float y) {
+		position.set(x, y);
+    	bounds.setLowerLeft(x, y);
 	}
 	
 }

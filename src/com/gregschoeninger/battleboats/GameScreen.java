@@ -18,6 +18,7 @@ public class GameScreen extends GLScreen {
 	private SpriteBatcher batcher;
 	private GameRenderer renderer;
 	private Map map;
+	private Vector2 touchPoint;
 	
 	
 	public GameScreen(Battleboats game) {
@@ -26,11 +27,22 @@ public class GameScreen extends GLScreen {
 		batcher = new SpriteBatcher(glGraphics, 1000);
 		map = new Map();
 		renderer = new GameRenderer(glGraphics, batcher, map);
+		touchPoint = new Vector2();
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		
+		updateSetup(deltaTime);
+	}
+	
+	private void updateSetup(float deltaTime) {
+		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
+		for(int i = 0; i < touchEvents.size(); i++) {
+	        TouchEvent event = touchEvents.get(i);
+	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
+	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
+	        map.checkDraggingBoat(event, touchPoint);
+		}
 	}
 	
 	private void updateReady(float deltaTime) {

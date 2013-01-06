@@ -57,10 +57,13 @@ public class GameRenderer {
 	}
 	
 	private void renderBoats() {
+//		for(Boat b : map.boats) {
+//			for(GridSpace g : b.getGridSpaces()) {
+//				batcher.drawSprite(g.bounds.lowerLeft.x, g.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat); 
+//			}
+//		}
 		for(Boat b : map.boats) {
-			for(GridSpace g : b.getGridSpaces()) {
-				batcher.drawSprite(g.bounds.lowerLeft.x, g.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat); 
-			}
+			batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat);
 		}
 	}
 	
