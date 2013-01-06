@@ -73,7 +73,7 @@ public class GameScreen extends GLScreen {
 	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
 	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
 	        if (touchedAttackButton(touchPoint)) {
-	        	//speechConverter.buttonPressed();
+	        	speechConverter.buttonPressed();
 	        	map.state = Map.GAME_OTHER_TURN;
 	        	playRandom();
 	        }
@@ -87,17 +87,16 @@ public class GameScreen extends GLScreen {
     	while(true) {
     		int randX = Math.abs(generator.nextInt()%(Map.MAP_WIDTH));
     		int randY = Math.abs(generator.nextInt()%(Map.MAP_HEIGHT));
-    		Log.d(Battleboats.DEBUG_TAG, "Hit:"+randX+" "+randY+" count: "+count);
     		if (map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
     			if (map.myGridSpaces[randX][randY].boat == null) {
 	    			map.myGridSpaces[randX][randY].state = GridSpace.MISS;
 	    		} else {
 	    			map.myGridSpaces[randX][randY].state = GridSpace.HIT;
 	    		}
-	    		count++;
+    			break;
+	    		//count++;
     		} 
-    		if (count == 64) break;
-    		
+    		//if (count == 64) break;
     	}
 	}
 	

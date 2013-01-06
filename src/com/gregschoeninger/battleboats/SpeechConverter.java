@@ -8,7 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -85,7 +86,9 @@ public class SpeechConverter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	Log.d(Battleboats.DEBUG_TAG, text);
+    	
+    	Coordinate c = getCoordinates();
+    	Log.d(Battleboats.DEBUG_TAG, "Text: "+text+" Coordinates: "+c);
     }
     
     
@@ -130,6 +133,17 @@ public class SpeechConverter {
             }
             return text;              
         }
+    }
+    
+    private Coordinate getCoordinates() {
+        
+        int row = 7 - (text.codePointAt(0) - 65);
+
+        String[] words = { "one", "two", "three", "four", "five", "six", "seven", "eight" };
+        List<String> values = Arrays.asList(words);
+        int col = values.indexOf(text.substring(text.lastIndexOf(" ") + 1, text.length()));
+        
+        return new Coordinate(row, col);
     }
 
 }
