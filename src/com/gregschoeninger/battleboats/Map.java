@@ -16,7 +16,7 @@ public class Map {
 	public static final int GAME_OTHER_TURN = 2;
 	public static final int GAME_PAUSED = 3;
 	public static final int GAME_OVER = 4;
-	public int state;
+	public static int state;
 	public static GridSpace[][] myGridSpaces;
 	public static GridSpace[][] theirGridSpaces;
 	public List<Boat> myBoats;
@@ -41,7 +41,9 @@ public class Map {
 		for(int i = 0; i < MAP_WIDTH; i++) {
 			for(int j = 0; j < MAP_WIDTH; j++) {
 				GridSpace g = new GridSpace(x_offset + i * (GridSpace.WIDTH+padding), y_offset + j * (GridSpace.HEIGHT+padding), i, j);
+				GridSpace g1 = new GridSpace(x_offset + i * (GridSpace.WIDTH+padding), y_offset + j * (GridSpace.HEIGHT+padding), i, j);
 				myGridSpaces[i][j] = g;
+				theirGridSpaces[i][j] = g1;
 			}
 		}
 	}
@@ -55,12 +57,18 @@ public class Map {
 		for(GridSpace g : patrol1.getGridSpaces(myGridSpaces)) {
 			g.boat = patrol1;
 		}
+		for(GridSpace g : patrol1.getGridSpaces(theirGridSpaces)) {
+			g.boat = patrol1;
+		}
 		myBoats.add(patrol1);
 		theirBoats.add(patrol1);
 		
 		// one submarine
 		Boat submarine = new Boat(0, 0, BoatType.SUBMARINE, BoatOrientation.HORIZONTAL, Assets.submarine_horizontal, Assets.submarine_vertical);
 		for(GridSpace g : submarine.getGridSpaces(myGridSpaces)) {
+			g.boat = submarine;
+		}
+		for(GridSpace g : submarine.getGridSpaces(theirGridSpaces)) {
 			g.boat = submarine;
 		}
 		myBoats.add(submarine);
@@ -71,12 +79,18 @@ public class Map {
 		for(GridSpace g : destroyer.getGridSpaces(myGridSpaces)) {
 			g.boat = destroyer;
 		}
+		for(GridSpace g : destroyer.getGridSpaces(theirGridSpaces)) {
+			g.boat = destroyer;
+		}
 		myBoats.add(destroyer);
 		theirBoats.add(destroyer);
 		
 		// aircraft carrier
 		Boat aircraft = new Boat(1, 6, BoatType.AIRCRAFT_CARRIER, BoatOrientation.HORIZONTAL, Assets.aircraft_horizontal, Assets.aircraft_vertical);
 		for(GridSpace g : aircraft.getGridSpaces(myGridSpaces)) {
+			g.boat = aircraft;
+		}
+		for(GridSpace g : aircraft.getGridSpaces(theirGridSpaces)) {
 			g.boat = aircraft;
 		}
 		myBoats.add(aircraft);

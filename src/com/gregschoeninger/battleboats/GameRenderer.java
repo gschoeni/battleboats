@@ -64,15 +64,15 @@ public class GameRenderer {
         
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         batcher.beginBatch(Assets.foregroundItems);
-        //renderDebugSquares();
+        renderDebugSquares();
         
         switch(map.state) {
 			case Map.GAME_READY:
 				renderBoats();
 				break;
 			case Map.GAME_ATTACK:
-				renderBoats();
-				renderHitsAndMisses(Map.myGridSpaces);
+				// renderBoats();
+				renderHitsAndMisses(Map.theirGridSpaces);
 				break;
 			case Map.GAME_OTHER_TURN:
 				renderBoats();

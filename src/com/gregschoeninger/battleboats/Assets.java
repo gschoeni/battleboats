@@ -50,7 +50,7 @@ public class Assets {
     	destroyer_vertical = new TextureRegion(foregroundItems, 50, 250, 50, 200);
     	aircraft_vertical = new TextureRegion(foregroundItems, 0, 200, 50, 250);
     	
-    	square = new TextureRegion(foregroundItems, 300, 0, 150, 150);
+    	square = new TextureRegion(foregroundItems, 150, 450, 150, 150);
     	hit = new TextureRegion(foregroundItems, 50, 450, 50, 50);
     	miss = new TextureRegion(foregroundItems, 0, 450, 50, 50);
     }

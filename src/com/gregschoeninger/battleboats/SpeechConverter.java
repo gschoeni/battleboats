@@ -91,8 +91,7 @@ public class SpeechConverter {
 			e.printStackTrace();
 		}
     	
-    	Coordinate c = getCoordinates();
-    	Log.d(Battleboats.DEBUG_TAG, "Text: "+text+" Coordinates: "+c);
+    	GameScreen.fireShot(text, new Coordinate(2, 2));
     }
     
     

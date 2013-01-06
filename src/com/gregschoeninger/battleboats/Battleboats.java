@@ -4,6 +4,7 @@ package com.gregschoeninger.battleboats;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,8 +19,6 @@ public class Battleboats extends GLGame {
 	@Override 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        
 	}
 	
 	@Override
@@ -43,6 +42,14 @@ public class Battleboats extends GLGame {
     @Override
     public void onPause() {
         super.onPause();
+    }
+    
+    public ProgressDialog doSpinner(String message) {
+    	ProgressDialog mDialog = new ProgressDialog(this);
+        mDialog.setMessage(message);
+        mDialog.setCancelable(false);
+        mDialog.show();
+        return mDialog;
     }
 }
 

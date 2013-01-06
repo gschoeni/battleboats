@@ -5,14 +5,13 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.gl.Camera2D;
 import com.badlogic.androidgames.framework.gl.SpriteBatcher;
 import com.badlogic.androidgames.framework.impl.GLScreen;
-import com.badlogic.androidgames.framework.math.OverlapTester;
-import com.badlogic.androidgames.framework.math.Rectangle;
 import com.badlogic.androidgames.framework.math.Vector2;
 
 public class GameScreen extends GLScreen {
@@ -23,10 +22,12 @@ public class GameScreen extends GLScreen {
 	private Map map;
 	private Vector2 touchPoint;
 	private SpeechConverter speechConverter;
+	private static Battleboats game;
+	private static ProgressDialog activityIndicator;
 	
-	
-	public GameScreen(Battleboats game, String speechFile, String accessToken) {
-		super(game);
+	public GameScreen(Battleboats g, String speechFile, String accessToken) {
+		super(g);
+		game = g;
 		guiCam = new Camera2D(glGraphics, 320, 480);
 		batcher = new SpriteBatcher(glGraphics, 1000);
 		map = new Map();
@@ -37,7 +38,7 @@ public class GameScreen extends GLScreen {
 
 	@Override
 	public void update(float deltaTime) {
-		switch(map.state) {
+		switch(Map.state) {
 			case Map.GAME_READY:
 				updateSetup(deltaTime);
 				break;
@@ -73,25 +74,50 @@ public class GameScreen extends GLScreen {
 	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
 	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
 	        if (touchedAttackButton(touchPoint)) {
+	        	game.runOnUiThread(new Runnable() {
+	        	    public void run() {
+	        	    	activityIndicator = game.doSpinner("Hmm....");
+	        	    }
+	        	});
+	        	
 	        	speechConverter.buttonPressed();
-	        	map.state = Map.GAME_OTHER_TURN;
-	        	playRandom();
+	        }
+	        if (touchedReadyButton(touchPoint)) {
+	        	playAutoTurn();
 	        }
 	    }
 		
 	}
 	
-	private void playRandom() {
+	public static void fireShot(String text, Coordinate c) {
+		Log.d(Battleboats.DEBUG_TAG, "Fire! Text: "+text+" Coordinates: "+c);
+		if (Map.theirGridSpaces[c.row][c.col].state == GridSpace.EMPTY) {
+			if (Map.theirGridSpaces[c.row][c.col].boat == null) {
+				Map.theirGridSpaces[c.row][c.col].state = GridSpace.MISS;
+    		} else {
+    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
+    		}
+		}
+		
+		game.runOnUiThread(new Runnable() {
+    	    public void run() {
+    	    	activityIndicator.hide();
+    	    }
+		});
+	}
+	
+	public static void playAutoTurn() {
+		Map.state = Map.GAME_OTHER_TURN;
 		Random generator = new Random();
 		int count = 0;
     	while(true) {
     		int randX = Math.abs(generator.nextInt()%(Map.MAP_WIDTH));
     		int randY = Math.abs(generator.nextInt()%(Map.MAP_HEIGHT));
-    		if (map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
-    			if (map.myGridSpaces[randX][randY].boat == null) {
-	    			map.myGridSpaces[randX][randY].state = GridSpace.MISS;
+    		if (Map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
+    			if (Map.myGridSpaces[randX][randY].boat == null) {
+    				Map.myGridSpaces[randX][randY].state = GridSpace.MISS;
 	    		} else {
-	    			map.myGridSpaces[randX][randY].state = GridSpace.HIT;
+	    			Map.myGridSpaces[randX][randY].state = GridSpace.HIT;
 	    		}
     			break;
 	    		//count++;
