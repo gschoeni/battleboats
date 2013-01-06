@@ -194,6 +194,14 @@ public class GameScreen extends GLScreen {
 		}
 	}
 	
+	private void checkGameOver() {
+		for (Boat b : map.myBoats) {
+			for (GridSpace g : b.getGridSpaces(Map.myGridSpaces)) {
+				
+			}
+		}
+	}
+	
 	private void updatePaused(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
