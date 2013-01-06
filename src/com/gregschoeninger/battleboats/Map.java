@@ -3,6 +3,8 @@ package com.gregschoeninger.battleboats;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.math.OverlapTester;
 import com.badlogic.androidgames.framework.math.Vector2;
@@ -19,8 +21,8 @@ public class Map {
 	
 	public static int MAP_WIDTH = 8; 
 	public static int MAP_HEIGHT = 8;
-	public static int x_offset = 50;
-	public static int y_offset = 150;
+	public static int x_offset = 79;
+	public static int y_offset = 142;
 	
 	public Map() {
 		generateGridSpaces();
@@ -76,7 +78,9 @@ public class Map {
 		float y = touchPoint.y + GridSpace.HEIGHT/2;
 		for(Boat b : boats) {
 			if (event.type == TouchEvent.TOUCH_DOWN && OverlapTester.pointInRectangle(b.bounds, x, y)) {
+				Log.d(Battleboats.DEBUG_TAG, "TOUCHED "+b.bounds);
 				b.state = Boat.IS_BEING_DRAGGED;
+				break;
 			}
 			if (event.type == TouchEvent.TOUCH_DRAGGED && b.state == Boat.IS_BEING_DRAGGED) {
 				b.setLocation(x, y);

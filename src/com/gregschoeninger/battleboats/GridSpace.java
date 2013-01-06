@@ -4,8 +4,8 @@ import com.badlogic.androidgames.framework.GameObject;
 
 public class GridSpace extends GameObject {
 	
-	public static int WIDTH = 35;
-	public static int HEIGHT = 35;
+	public static int WIDTH = 33;
+	public static int HEIGHT = 33;
 	public int row;
 	public int col;
 	public boolean hit;
