@@ -71,10 +71,11 @@ public class GameRenderer {
 				renderBoats();
 				break;
 			case Map.GAME_ATTACK:
-				// renderBoats();
+				renderSunken();
 				renderHitsAndMisses(Map.theirGridSpaces);
 				break;
 			case Map.GAME_OTHER_TURN:
+				renderSunken();
 				renderBoats();
 				renderHitsAndMisses(Map.myGridSpaces);
 				break;
@@ -101,7 +102,6 @@ public class GameRenderer {
 		for(Boat b : map.myBoats) {
 			switch(b.boatType.size) {
 				case 2:
-					
 					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, b.orientation == BoatOrientation.VERTICAL ? Assets.patrol_boat_vertical : Assets.patrol_boat_horizontal);
 					break;
 				case 3:
@@ -115,6 +115,32 @@ public class GameRenderer {
 					break;
 			}
 		}
+	}
+	
+	private void renderSunken() {
+		for(Boat b : map.myBoats) {
+			switch(b.boatType.size) {
+				case 2:
+					batcher.drawSprite(275, 460, 90, 35, !isBoatSunken(b) ? Assets.non_sunken_patrol_boat : Assets.sunken_patrol_boat);
+					break;
+				case 3:
+					batcher.drawSprite(255, 435, 100, 40, !isBoatSunken(b) ? Assets.non_sunken_submarine : Assets.sunken_submarine);
+					break;
+				case 4:
+					batcher.drawSprite(175, 435, 145, 40, !isBoatSunken(b) ? Assets.non_sunken_destroyer : Assets.sunken_destroyer);
+					break;
+				case 5:
+					batcher.drawSprite(180, 463, 155, 35, !isBoatSunken(b) ? Assets.non_sunken_aircraft : Assets.sunken_aircraft);
+					break;
+			}
+		}
+	}
+	
+	private boolean isBoatSunken(Boat boat) {
+		for (Boat b : GameScreen.sunkenShips) {
+			if (b.boatType == boat.boatType) return true;
+		}
+		return false;
 	}
 	
 	private void renderDebugSquares() {

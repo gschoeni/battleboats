@@ -23,6 +23,16 @@ public class Assets {
     public static TextureRegion destroyer_vertical;
     public static TextureRegion aircraft_vertical;
     
+    public static TextureRegion sunken_patrol_boat;
+    public static TextureRegion sunken_submarine;
+    public static TextureRegion sunken_destroyer;
+    public static TextureRegion sunken_aircraft;
+    
+    public static TextureRegion non_sunken_patrol_boat;
+    public static TextureRegion non_sunken_submarine;
+    public static TextureRegion non_sunken_destroyer;
+    public static TextureRegion non_sunken_aircraft;
+    
     public static TextureRegion square;
     public static TextureRegion hit;
     public static TextureRegion miss;
@@ -49,6 +59,16 @@ public class Assets {
     	submarine_vertical = new TextureRegion(foregroundItems, 100, 300, 50, 150);
     	destroyer_vertical = new TextureRegion(foregroundItems, 50, 250, 50, 200);
     	aircraft_vertical = new TextureRegion(foregroundItems, 0, 200, 50, 250);
+    	
+    	sunken_patrol_boat = new TextureRegion(foregroundItems, 175, 50, 125, 50);
+    	sunken_submarine = new TextureRegion(foregroundItems, 300, 50, 100, 50);
+    	sunken_destroyer = new TextureRegion(foregroundItems, 400, 50, 200, 50);
+    	sunken_aircraft = new TextureRegion(foregroundItems, 250, 150, 200, 50);
+    	
+    	non_sunken_patrol_boat = new TextureRegion(foregroundItems, 200, 0, 100, 50);
+    	non_sunken_submarine = new TextureRegion(foregroundItems, 300, 0, 100, 50);
+    	non_sunken_destroyer = new TextureRegion(foregroundItems, 400, 0, 200, 50);
+    	non_sunken_aircraft = new TextureRegion(foregroundItems, 250, 100, 200, 50);
     	
     	square = new TextureRegion(foregroundItems, 150, 450, 150, 150);
     	hit = new TextureRegion(foregroundItems, 50, 450, 50, 50);
