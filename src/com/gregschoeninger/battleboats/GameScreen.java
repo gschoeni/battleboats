@@ -109,8 +109,12 @@ public class GameScreen extends GLScreen {
 			if (Map.theirGridSpaces[c.row][c.col].state == GridSpace.EMPTY) {
 				if (Map.theirGridSpaces[c.row][c.col].boat == null) {
 					Map.theirGridSpaces[c.row][c.col].state = GridSpace.MISS;
+					Log.d(Battleboats.DEBUG_TAG, "miss! " + Assets.missFX);
+					Assets.missFX.play(1);
 	    		} else {
 	    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
+	    			Log.d(Battleboats.DEBUG_TAG, "hit! " + Assets.hitFX);
+	    			Assets.hitFX.play(1);
 	    		}
 			} else {
 	        	game.runOnUiThread(new Runnable() {
@@ -162,8 +166,12 @@ public class GameScreen extends GLScreen {
     		if (Map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
     			if (Map.myGridSpaces[randX][randY].boat == null) {
     				Map.myGridSpaces[randX][randY].state = GridSpace.MISS;
+					Log.d(Battleboats.DEBUG_TAG, "miss! " + Assets.missFX);
+					Assets.missFX.play(1);
 	    		} else {
 	    			Map.myGridSpaces[randX][randY].state = GridSpace.HIT;
+	    			Log.d(Battleboats.DEBUG_TAG, "hit! " + Assets.hitFX);
+	    			Assets.hitFX.play(1);
 	    		}
     			
     			break;
@@ -223,7 +231,7 @@ public class GameScreen extends GLScreen {
 	}
 	
 	private boolean touchedAttackButton(Vector2 p) {
-
+		Assets.hitFX.play(1);
     	Log.d(Battleboats.DEBUG_TAG, "update attack click"+p);
 		return p.x < 100 && p.y < 80 && !hasFired;
 	}

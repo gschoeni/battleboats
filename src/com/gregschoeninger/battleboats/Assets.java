@@ -1,5 +1,6 @@
 package com.gregschoeninger.battleboats;
 
+import com.badlogic.androidgames.framework.Sound;
 import com.badlogic.androidgames.framework.gl.Texture;
 import com.badlogic.androidgames.framework.gl.TextureRegion;
 import com.badlogic.androidgames.framework.impl.GLGame;
@@ -27,6 +28,9 @@ public class Assets {
     public static TextureRegion hit;
     public static TextureRegion miss;
     
+    public static Sound hitFX;
+    public static Sound missFX;
+    
     // Suppress default constructor for noninstantiability
     private Assets() {
         throw new AssertionError();
@@ -53,6 +57,9 @@ public class Assets {
     	square = new TextureRegion(foregroundItems, 150, 450, 150, 150);
     	hit = new TextureRegion(foregroundItems, 50, 450, 50, 50);
     	miss = new TextureRegion(foregroundItems, 0, 450, 50, 50);
+    	
+    	hitFX = game.getAudio().newSound("hit.ogg");
+    	missFX = game.getAudio().newSound("miss.ogg");
     }
 
     public static void reload() {
