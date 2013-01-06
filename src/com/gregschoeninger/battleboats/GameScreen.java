@@ -76,11 +76,23 @@ public class GameScreen extends GLScreen {
 	        if (touchedAttackButton(touchPoint)) {
 	        	game.runOnUiThread(new Runnable() {
 	        	    public void run() {
-	        	    	activityIndicator = game.doSpinner("Hmm....");
+	        	    	activityIndicator = game.doSpinner("Speak Now...");
 	        	    }
 	        	});
-	        	
 	        	speechConverter.buttonPressed();
+	        	new java.util.Timer().schedule( 
+	        	        new java.util.TimerTask() {
+	        	            @Override
+	        	            public void run() {
+	        	            	game.runOnUiThread(new Runnable() {
+	        		        	    public void run() {
+	        		        	    	activityIndicator.setMessage("Thinking...");
+	        		        	    }
+	        		        	});
+	        	            }
+	        	        }, 
+	        	        4000 
+	        	);
 	        }
 	        if (touchedReadyButton(touchPoint)) {
 	        	playAutoTurn();

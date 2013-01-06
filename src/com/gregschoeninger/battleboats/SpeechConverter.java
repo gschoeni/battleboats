@@ -48,7 +48,7 @@ public class SpeechConverter {
     	                convertSpeechToText();
     	            }
     	        }, 
-    	        3000 
+    	        4000 
     	);
 
     }
