@@ -120,6 +120,7 @@ public class GameScreen extends GLScreen {
 	    			Log.d(Battleboats.DEBUG_TAG, "hit! " + Assets.hitFX);
 	    			Assets.hitFX.play(1);
 	    		}
+				hasFired = true;
 			} else {
 	        	game.runOnUiThread(new Runnable() {
 	        	    public void run() {
@@ -127,7 +128,7 @@ public class GameScreen extends GLScreen {
 	        	    }
 	        	});
 			}
-			hasFired = true;
+			
 			checkGameOver();
 		} else {
         	game.runOnUiThread(new Runnable() {
