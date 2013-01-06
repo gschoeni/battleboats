@@ -89,15 +89,20 @@ public class GameScreen extends GLScreen {
 		
 	}
 	
-	public static void fireShot(String text, Coordinate c) {
-		Log.d(Battleboats.DEBUG_TAG, "Fire! Text: "+text+" Coordinates: "+c);
-		if (Map.theirGridSpaces[c.row][c.col].state == GridSpace.EMPTY) {
-			if (Map.theirGridSpaces[c.row][c.col].boat == null) {
-				Map.theirGridSpaces[c.row][c.col].state = GridSpace.MISS;
-    		} else {
-    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
-    		}
+	public static void fireShot(Coordinate c) {
+		Log.d(Battleboats.DEBUG_TAG, "Fire! Coordinates: "+c);
+		if (c != null) {
+			if (Map.theirGridSpaces[c.row][c.col].state == GridSpace.EMPTY) {
+				if (Map.theirGridSpaces[c.row][c.col].boat == null) {
+					Map.theirGridSpaces[c.row][c.col].state = GridSpace.MISS;
+	    		} else {
+	    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
+	    		}
+			}			
+		} else {
+			// reset
 		}
+
 		
 		game.runOnUiThread(new Runnable() {
     	    public void run() {
