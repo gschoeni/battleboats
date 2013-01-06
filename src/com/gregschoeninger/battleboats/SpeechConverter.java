@@ -56,7 +56,7 @@ public class SpeechConverter {
         wordToIndex.put("b", 6);
 
         wordToIndex.put("charlie", 5);
-        numberToIndex.put("she", 7);
+        wordToIndex.put("she", 7);
         wordToIndex.put("c", 5);
 
         wordToIndex.put("delta", 4);

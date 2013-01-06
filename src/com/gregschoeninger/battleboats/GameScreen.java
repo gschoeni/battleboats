@@ -24,6 +24,7 @@ public class GameScreen extends GLScreen {
 	private SpeechConverter speechConverter;
 	private static Battleboats game;
 	private static ProgressDialog activityIndicator;
+	public static boolean hasFired = false;
 	
 	public GameScreen(Battleboats g, String speechFile, String accessToken) {
 		super(g);
@@ -103,6 +104,7 @@ public class GameScreen extends GLScreen {
 	
 	public static void fireShot(Coordinate c) {
 		Log.d(Battleboats.DEBUG_TAG, "Fire! Coordinates: "+c);
+		
 		if (c != null) {
 			if (Map.theirGridSpaces[c.row][c.col].state == GridSpace.EMPTY) {
 				if (Map.theirGridSpaces[c.row][c.col].boat == null) {
@@ -110,7 +112,8 @@ public class GameScreen extends GLScreen {
 	    		} else {
 	    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
 	    		}
-			}			
+			}
+			hasFired = true;
 		} else {
 			// reset
 		}
@@ -149,8 +152,12 @@ public class GameScreen extends GLScreen {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
-	        if(event.type != TouchEvent.TOUCH_DOWN) return;
-	        map.state = Map.GAME_ATTACK;
+	        if (event.type != TouchEvent.TOUCH_DOWN) return;
+	        if (touchedReadyButton(touchPoint)) {
+	        	Map.state = Map.GAME_ATTACK;
+	        	hasFired = false;
+	        }
+	        	
 		}
 	}
 	
@@ -173,13 +180,13 @@ public class GameScreen extends GLScreen {
 	}
 	
 	private boolean touchedReadyButton(Vector2 p) {
-		return p.x > 225 && p.y < 80;
+		return p.x > 225 && p.y < 80 && (Map.state == Map.GAME_READY || Map.state == Map.GAME_OTHER_TURN || (hasFired && Map.state == Map.GAME_ATTACK));
 	}
 	
 	private boolean touchedAttackButton(Vector2 p) {
 
     	Log.d(Battleboats.DEBUG_TAG, "update attack click"+p);
-		return p.x < 100 && p.y < 80;
+		return p.x < 100 && p.y < 80 && !hasFired;
 	}
 
 	@Override
