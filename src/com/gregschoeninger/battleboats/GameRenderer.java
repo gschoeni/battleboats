@@ -65,15 +65,40 @@ public class GameRenderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         batcher.beginBatch(Assets.foregroundItems);
         //renderDebugSquares();
-        renderBoats();
+        
+        switch(map.state) {
+			case Map.GAME_READY:
+				renderBoats();
+				break;
+			case Map.GAME_ATTACK:
+				renderBoats();
+				renderHitsAndMisses(Map.myGridSpaces);
+				break;
+			case Map.GAME_OTHER_TURN:
+				renderBoats();
+				renderHitsAndMisses(Map.myGridSpaces);
+				break;
+        }
+        
         
         batcher.endBatch();
         gl.glDisable(GL10.GL_BLEND);
 	}
 	
+	private void renderHitsAndMisses(GridSpace[][] gridSpaces) {
+		for(int i = 0; i < Map.MAP_WIDTH; i++) {
+			for(int j = 0; j < Map.MAP_WIDTH; j++) {
+				if (gridSpaces[i][j].state == GridSpace.HIT) {
+					batcher.drawSprite(gridSpaces[i][j].bounds.lowerLeft.x, gridSpaces[i][j].bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.hit);	
+				} else if (gridSpaces[i][j].state == GridSpace.MISS) {
+					batcher.drawSprite(gridSpaces[i][j].bounds.lowerLeft.x, gridSpaces[i][j].bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.miss);
+				}
+			}
+		}
+	}
+	
 	private void renderBoats() {
-		for(Boat b : map.boats) {
-			
+		for(Boat b : map.myBoats) {
 			switch(b.boatType.size) {
 				case 2:
 					
@@ -95,7 +120,7 @@ public class GameRenderer {
 	private void renderDebugSquares() {
 		for(int i = 0; i < Map.MAP_WIDTH; i++) {
 			for(int j = 0; j < Map.MAP_WIDTH; j++) {
-				batcher.drawSprite(Map.gridSpaces[i][j].bounds.lowerLeft.x, Map.gridSpaces[i][j].bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.square); 
+				batcher.drawSprite(Map.myGridSpaces[i][j].bounds.lowerLeft.x, Map.myGridSpaces[i][j].bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.square); 
 			}
 		}
 	}

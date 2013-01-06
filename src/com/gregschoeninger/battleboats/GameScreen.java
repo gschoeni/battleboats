@@ -1,6 +1,7 @@
 package com.gregschoeninger.battleboats;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -24,14 +25,14 @@ public class GameScreen extends GLScreen {
 	private SpeechConverter speechConverter;
 	
 	
-	public GameScreen(Battleboats game) {
+	public GameScreen(Battleboats game, String speechFile, String accessToken) {
 		super(game);
 		guiCam = new Camera2D(glGraphics, 320, 480);
 		batcher = new SpriteBatcher(glGraphics, 1000);
 		map = new Map();
 		renderer = new GameRenderer(glGraphics, batcher, map);
 		touchPoint = new Vector2();
-		speechConverter = new SpeechConverter();
+		speechConverter = new SpeechConverter(speechFile, accessToken);
 	}
 
 	@Override
@@ -54,14 +55,12 @@ public class GameScreen extends GLScreen {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
-	        
 	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
 	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
 	        if (touchedReadyButton(touchPoint)) {
 	        	map.state = Map.GAME_ATTACK;
 	        	break;
 	        }
-	        	
 	        map.checkDraggingBoat(event, touchPoint);
 		}
 	}
@@ -71,19 +70,45 @@ public class GameScreen extends GLScreen {
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
 	        if(event.type != TouchEvent.TOUCH_DOWN) return;
+	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
+	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
 	        if (touchedAttackButton(touchPoint)) {
-	        	speechConverter.buttonPressed();
+	        	//speechConverter.buttonPressed();
+	        	map.state = Map.GAME_OTHER_TURN;
+	        	playRandom();
 	        }
 	    }
 		
 	}
 	
+	private void playRandom() {
+		Random generator = new Random();
+		int count = 0;
+    	while(true) {
+    		int randX = Math.abs(generator.nextInt()%(Map.MAP_WIDTH));
+    		int randY = Math.abs(generator.nextInt()%(Map.MAP_HEIGHT));
+    		Log.d(Battleboats.DEBUG_TAG, "Hit:"+randX+" "+randY+" count: "+count);
+    		if (map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
+    			if (map.myGridSpaces[randX][randY].boat == null) {
+	    			map.myGridSpaces[randX][randY].state = GridSpace.MISS;
+	    		} else {
+	    			map.myGridSpaces[randX][randY].state = GridSpace.HIT;
+	    		}
+	    		count++;
+    		} 
+    		if (count == 64) break;
+    		
+    	}
+	}
+	
 	private void updateOtherTurn(float deltaTime) {
+		
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
-	        
-	    }
+	        if(event.type != TouchEvent.TOUCH_DOWN) return;
+	        map.state = Map.GAME_ATTACK;
+		}
 	}
 	
 	private void updatePaused(float deltaTime) {
@@ -109,6 +134,8 @@ public class GameScreen extends GLScreen {
 	}
 	
 	private boolean touchedAttackButton(Vector2 p) {
+
+    	Log.d(Battleboats.DEBUG_TAG, "update attack click"+p);
 		return p.x < 100 && p.y < 80;
 	}
 

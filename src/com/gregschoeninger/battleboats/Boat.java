@@ -9,7 +9,6 @@ import com.badlogic.androidgames.framework.gl.TextureRegion;
 
 public class Boat extends GameObject {
 	
-	public int size;
 	public int damage;
 	public int row;
 	public int col;
@@ -55,7 +54,8 @@ public class Boat extends GameObject {
 	
 	public float getLowerLeftX() {
 		if (this.orientation == BoatOrientation.HORIZONTAL) {
-			return this.bounds.lowerLeft.x + GridSpace.WIDTH;
+			int scale = boatType.size / 2;
+			return this.bounds.lowerLeft.x + scale * GridSpace.WIDTH;
 		} else {
 			return this.bounds.lowerLeft.x;
 		}
@@ -65,25 +65,31 @@ public class Boat extends GameObject {
 		if (this.orientation == BoatOrientation.HORIZONTAL) {
 			return this.bounds.lowerLeft.y;
 		} else {
-			return this.bounds.lowerLeft.y + GridSpace.WIDTH / 2;
+			int offset = 0;
+			if (boatType == BoatType.DESTROYER) {
+				offset = GridSpace.WIDTH+7;
+			}
+			return this.bounds.lowerLeft.y + GridSpace.WIDTH/boatType.size+offset;
 		}
 	}
 	
-	public ArrayList<GridSpace> getGridSpaces() {
+	public ArrayList<GridSpace> getGridSpaces(GridSpace[][] gridSpaces) {
 		ArrayList<GridSpace> g = new ArrayList<GridSpace>();
 		for(int i = 0; i < boatType.size; i++) {
 			if (orientation == BoatOrientation.VERTICAL) {
-				g.add(Map.gridSpaces[row][col+i]);
+				g.add(gridSpaces[row][col+i]);
 			} else {
-				g.add(Map.gridSpaces[row+i][col]);
+				g.add(gridSpaces[row+i][col]);
 			}
 		}
 		return g;
 	}
 	
-	public void setLocation(float x, float y) {
+	public void setLocation(float x, float y, int row, int col) {
 		position.set(x, y);
     	bounds.setLowerLeft(x, y);
+    	this.row = row;
+    	this.col = col;
 	}
 	
 	public TextureRegion getTextureRegion() {

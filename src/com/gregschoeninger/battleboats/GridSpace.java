@@ -8,7 +8,10 @@ public class GridSpace extends GameObject {
 	public static int HEIGHT = 33;
 	public int row;
 	public int col;
-	public boolean hit;
+	public static final int HIT = 0;
+	public static final int MISS = 1;
+	public static final int EMPTY = 2;
+	public int state;
 	public Boat boat;
 	
 	public GridSpace(float x, float y, int row, int col) {
@@ -16,6 +19,6 @@ public class GridSpace extends GameObject {
 		this.row = row;
 		this.col = col;
 		this.boat = null;
-		this.hit = false;
+		this.state = EMPTY;
 	}
 }

@@ -24,6 +24,8 @@ public class Assets {
     public static TextureRegion aircraft_vertical;
     
     public static TextureRegion square;
+    public static TextureRegion hit;
+    public static TextureRegion miss;
     
     // Suppress default constructor for noninstantiability
     private Assets() {
@@ -43,12 +45,14 @@ public class Assets {
     	destroyer_horizontal = new TextureRegion(foregroundItems, 0, 100, 200, 50);
     	aircraft_horizontal = new TextureRegion(foregroundItems, 0, 150, 250, 50);
     	
-    	patrol_boat_vertical = new TextureRegion(foregroundItems, 0, 200, 50, 250);
-    	submarine_vertical = new TextureRegion(foregroundItems, 50, 250, 50, 200);
-    	destroyer_vertical = new TextureRegion(foregroundItems, 100, 300, 50, 150);
-    	aircraft_vertical = new TextureRegion(foregroundItems, 150, 350, 50, 100);
+    	patrol_boat_vertical = new TextureRegion(foregroundItems, 150, 350, 50, 100);
+    	submarine_vertical = new TextureRegion(foregroundItems, 100, 300, 50, 150);
+    	destroyer_vertical = new TextureRegion(foregroundItems, 50, 250, 50, 200);
+    	aircraft_vertical = new TextureRegion(foregroundItems, 0, 200, 50, 250);
     	
     	square = new TextureRegion(foregroundItems, 300, 0, 150, 150);
+    	hit = new TextureRegion(foregroundItems, 50, 450, 50, 50);
+    	miss = new TextureRegion(foregroundItems, 0, 450, 50, 50);
     }
 
     public static void reload() {
