@@ -2,6 +2,8 @@ package com.gregschoeninger.battleboats;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.gl.Camera2D;
 import com.badlogic.androidgames.framework.gl.SpriteBatcher;
 import com.badlogic.androidgames.framework.impl.GLGraphics;
@@ -49,7 +51,7 @@ public class GameRenderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         batcher.beginBatch(Assets.foregroundItems);
         
-        renderDebugSquares();
+        //renderDebugSquares();
         renderBoats();
         
         batcher.endBatch();
@@ -57,13 +59,21 @@ public class GameRenderer {
 	}
 	
 	private void renderBoats() {
-//		for(Boat b : map.boats) {
-//			for(GridSpace g : b.getGridSpaces()) {
-//				batcher.drawSprite(g.bounds.lowerLeft.x, g.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat); 
-//			}
-//		}
 		for(Boat b : map.boats) {
-			batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, GridSpace.WIDTH, GridSpace.HEIGHT, Assets.boat);
+			switch(b.boatType.size) {
+				case 2:
+					batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, b.bounds.width, b.bounds.height, Assets.patrol_boat);
+					break;
+				case 3:
+					batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, b.bounds.width, b.bounds.height, Assets.submarine);
+					break;
+				case 4:
+					batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, b.bounds.width, b.bounds.height, Assets.destroyer);
+					break;
+				case 5:
+					batcher.drawSprite(b.bounds.lowerLeft.x, b.bounds.lowerLeft.y, b.bounds.width, b.bounds.height, Assets.aircraft);
+					break;
+			}	
 		}
 	}
 	
