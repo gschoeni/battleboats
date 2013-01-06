@@ -66,7 +66,7 @@ public class GameRenderer {
         batcher.beginBatch(Assets.foregroundItems);
         renderDebugSquares();
         
-        switch(map.state) {
+        switch(Map.state) {
 			case Map.GAME_READY:
 				renderBoats();
 				break;

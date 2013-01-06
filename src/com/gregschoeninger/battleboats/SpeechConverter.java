@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -16,29 +17,99 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.util.Log;
 
+@SuppressLint("DefaultLocale")
 public class SpeechConverter {
-	
-	private String filename;
+    
+    private String filename;
 
     public String accessToken;
-    public String text;
+    public String row = "";
+    public String col = "";
     MediaRecorder recorder;
     
+    HashMap<String, Integer> wordToIndex;
+    HashMap<String, Integer> numberToIndex;
+    
     public SpeechConverter(String file, String accessToken) {
-    	this.filename = file;
-    	this.accessToken = accessToken;
+        this.filename = file;
+        this.accessToken = accessToken;
+        setupWordList();
+        setupNumberList();
     }
     
 
+    private void setupWordList() {
+        wordToIndex = new HashMap<String, Integer>();
+        wordToIndex.put("alpha", 7);
+        wordToIndex.put("a", 7);
+        wordToIndex.put("eight", 7);
+        wordToIndex.put("hey", 7);
+
+        wordToIndex.put("beta", 6);
+        wordToIndex.put("be", 6);
+        wordToIndex.put("bee", 6);
+        wordToIndex.put("b", 6);
+
+        wordToIndex.put("charlie", 5);
+        wordToIndex.put("c", 5);
+
+        wordToIndex.put("delta", 4);
+        wordToIndex.put("d", 4);
+
+        wordToIndex.put("echo", 3);
+        wordToIndex.put("e", 3);
+
+        wordToIndex.put("foxtrot", 2);
+        wordToIndex.put("f", 2);
+
+        wordToIndex.put("gamma", 1);
+        wordToIndex.put("g", 1);
+        
+        wordToIndex.put("hotel", 0);
+        wordToIndex.put("h", 0);
+    }
+
+    private void setupNumberList() {
+        numberToIndex = new HashMap<String, Integer>();
+
+        numberToIndex.put("eight", 7);
+        numberToIndex.put("ate", 7);
+
+        numberToIndex.put("seven", 6);
+
+        numberToIndex.put("six", 5);
+
+        numberToIndex.put("five", 4);
+        numberToIndex.put("phi", 4);
+
+        numberToIndex.put("four", 3);
+        numberToIndex.put("form", 3);
+        numberToIndex.put("more", 3);
+        numberToIndex.put("door", 3);
+
+        numberToIndex.put("three", 2);
+        numberToIndex.put("free", 2);
+        numberToIndex.put("tree", 2);
+        numberToIndex.put("ready", 2);
+
+        numberToIndex.put("two", 1);
+        numberToIndex.put("too", 1);
+        numberToIndex.put("to", 1);
+
+        numberToIndex.put("won", 0);
+        numberToIndex.put("one", 0);
+    }
+
+
     public void buttonPressed() {   
-    	Log.d(Battleboats.DEBUG_TAG, "Clicked! Start Recording.");
-    	setupRecorder();
+        Log.d(Battleboats.DEBUG_TAG, "Clicked! Start Recording.");
+        setupRecorder();
         startRecording();
-    	
     	new java.util.Timer().schedule( 
     	        new java.util.TimerTask() {
     	            @Override
@@ -50,7 +121,6 @@ public class SpeechConverter {
     	        }, 
     	        4000 
     	);
-
     }
 
     private void setupRecorder() {
@@ -81,30 +151,28 @@ public class SpeechConverter {
     }
 
     private void convertSpeechToText() {
-    	try {
-			text = new TextRequest().execute(filename).get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	GameScreen.fireShot(text, new Coordinate(2, 2));
+        try {
+            new TextRequest().execute(filename).get();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        GameScreen.fireShot(getCoordinates());
     }
     
     
 
-    private class TextRequest extends AsyncTask<String, Void, String> {
+    private class TextRequest extends AsyncTask<String, Void, Void> {
 
         String SPEECH_TO_TEXT_URL = "https://api.att.com/rest/2/SpeechToText";
 
         @Override
-        protected String doInBackground(String... args) {
+        protected Void doInBackground(String... args) {
             HttpURLConnection speech = null;
-            String text = "?";
-            Log.d(Battleboats.DEBUG_TAG, "starting");
+            Log.d(Battleboats.DEBUG_TAG, "sending request..");
             try {
                 speech = (HttpURLConnection) new URL(SPEECH_TO_TEXT_URL).openConnection();
                 speech.setDoOutput(true);
@@ -126,27 +194,37 @@ public class SpeechConverter {
                     JSONObject recognition = new JSONObject(result.next()).getJSONObject("Recognition");
                     Log.d(Battleboats.DEBUG_TAG, "Surprise Mothafucker! "+recognition);
                     JSONArray nBest = recognition.getJSONArray("NBest");
-                    JSONObject words = nBest.getJSONObject(0);
-                    text = words.getString("ResultText");
+                    JSONObject first = nBest.getJSONObject(0);
+                    JSONArray list = first.getJSONArray("Words");
+                    row = list.getString(0).toLowerCase();
+                    col = list.getString(list.length() - 1).replace(".", "").toLowerCase();
                 }
             } catch (Exception e){
                 // TODO
             } finally {
                 speech.disconnect();
-            }
-            return text;              
+            }     
+            return null;
         }
     }
     
-    private Coordinate getCoordinates() {
-        
-        int row = 7 - (text.codePointAt(0) - 65);
-
-        String[] words = { "one", "two", "three", "four", "five", "six", "seven", "eight" };
-        List<String> values = Arrays.asList(words);
-        int col = values.indexOf(text.substring(text.lastIndexOf(" ") + 1, text.length()));
-        
-        return new Coordinate(row, col);
+    public Coordinate getCoordinates() {
+        try {
+            Log.d(Battleboats.DEBUG_TAG, "trying..");
+            Integer r = wordToIndex.get(row);
+            
+            if (r == null) {
+                r = wordToIndex.get(row.charAt(0));
+            }
+            Log.d(Battleboats.DEBUG_TAG, "Number to index: "+numberToIndex.get(col));
+            int c = numberToIndex.get(col);
+            Log.d(Battleboats.DEBUG_TAG, "indices: "+ r + " " + c);
+            Log.d(Battleboats.DEBUG_TAG, "done.");
+            return new Coordinate(c, r);            
+        } catch (Exception e){
+            Log.d(Battleboats.DEBUG_TAG, e+"");
+            return null;
+        }
     }
 
 }
