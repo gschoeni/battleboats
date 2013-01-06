@@ -56,9 +56,11 @@ public class SpeechConverter {
         wordToIndex.put("b", 6);
 
         wordToIndex.put("charlie", 5);
+        numberToIndex.put("she", 7);
         wordToIndex.put("c", 5);
 
         wordToIndex.put("delta", 4);
+        wordToIndex.put("steve", 4);
         wordToIndex.put("d", 4);
 
         wordToIndex.put("echo", 3);
@@ -78,6 +80,7 @@ public class SpeechConverter {
         numberToIndex = new HashMap<String, Integer>();
 
         numberToIndex.put("eight", 7);
+        numberToIndex.put("hate", 7);
         numberToIndex.put("ate", 7);
 
         numberToIndex.put("seven", 6);
@@ -88,6 +91,7 @@ public class SpeechConverter {
         numberToIndex.put("phi", 4);
 
         numberToIndex.put("four", 3);
+        numberToIndex.put("for", 3);
         numberToIndex.put("form", 3);
         numberToIndex.put("more", 3);
         numberToIndex.put("door", 3);
@@ -199,7 +203,7 @@ public class SpeechConverter {
                     JSONObject first = nBest.getJSONObject(0);
                     JSONArray list = first.getJSONArray("Words");
                     row = list.getString(0).toLowerCase();
-                    col = list.getString(list.length() - 1).toLowerCase();
+                    col = list.getString(list.length() - 1).replace(".","").toLowerCase();
                 }
             } catch (Exception e){
                 // TODO
@@ -214,11 +218,14 @@ public class SpeechConverter {
         try {
             Log.d(Battleboats.DEBUG_TAG, "trying..");
             Integer r = wordToIndex.get(row);
+            Log.d(Battleboats.DEBUG_TAG, "R "+r);
             if (r == null) {
                 r = wordToIndex.get(row.charAt(0));
+                Log.d(Battleboats.DEBUG_TAG, row + " " + row.charAt(0));
             }
             int c = numberToIndex.get(col);
-            Log.d(Battleboats.DEBUG_TAG, "indices: "+ r + " " + c);
+            Log.d(Battleboats.DEBUG_TAG, col + " " + c);
+            Log.d(Battleboats.DEBUG_TAG, "d "+r);
             Log.d(Battleboats.DEBUG_TAG, "done.");
             return new Coordinate(r, c);            
         } catch (Exception e){
