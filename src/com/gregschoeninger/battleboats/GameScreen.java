@@ -136,16 +136,22 @@ public class GameScreen extends GLScreen {
     	        }, 
     	        2000 
     	);		
-
 	}
 	
 	public static void playAutoTurn() {
 		Map.state = Map.GAME_OTHER_TURN;
+		game.runOnUiThread(new Runnable() {
+    	    public void run() {
+    	    	activityIndicator = game.doSpinner("Firing Back...");
+    	    }
+    	});
 		Random generator = new Random();
 		int count = 0;
+		int randX;
+		int randY;
     	while(true) {
-    		int randX = Math.abs(generator.nextInt()%(Map.MAP_WIDTH));
-    		int randY = Math.abs(generator.nextInt()%(Map.MAP_HEIGHT));
+    		randX = Math.abs(generator.nextInt()%(Map.MAP_WIDTH));
+    		randY = Math.abs(generator.nextInt()%(Map.MAP_HEIGHT));
     		Log.d(Battleboats.DEBUG_TAG, "Random Coord row: "+randX+" col:"+randY);
     		if (Map.myGridSpaces[randX][randY].state == GridSpace.EMPTY) {
     			if (Map.myGridSpaces[randX][randY].boat == null) {
@@ -153,11 +159,25 @@ public class GameScreen extends GLScreen {
 	    		} else {
 	    			Map.myGridSpaces[randX][randY].state = GridSpace.HIT;
 	    		}
+    			
     			break;
 	    		//count++;
     		} 
     		//if (count == 64) break;
     	}
+    	new java.util.Timer().schedule( 
+    	        new java.util.TimerTask() {
+    	            @Override
+    	            public void run() {
+    	            	game.runOnUiThread(new Runnable() {
+    		        	    public void run() {
+    		        	    	activityIndicator.hide();
+    		        	    }
+    		        	});
+    	            }
+    	        }, 
+    	        1500 
+    	);
 	}
 	
 	private void updateOtherTurn(float deltaTime) {
