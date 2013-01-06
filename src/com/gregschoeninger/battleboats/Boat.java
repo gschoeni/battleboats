@@ -100,4 +100,8 @@ public class Boat extends GameObject {
 		}
 	}
 	
+	public String toString() {
+		return "Boat Type: "+boatType+" size: "+boatType.size;
+	}
+	
 }

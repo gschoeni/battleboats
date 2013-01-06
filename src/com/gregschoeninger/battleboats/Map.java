@@ -19,8 +19,8 @@ public class Map {
 	public static int state;
 	public static GridSpace[][] myGridSpaces;
 	public static GridSpace[][] theirGridSpaces;
-	public List<Boat> myBoats;
-	public List<Boat> theirBoats;
+	public static List<Boat> myBoats;
+	public static List<Boat> theirBoats;
 	
 	public static int MAP_WIDTH = 8; 
 	public static int MAP_HEIGHT = 8;

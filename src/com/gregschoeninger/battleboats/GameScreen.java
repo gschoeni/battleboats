@@ -1,7 +1,9 @@
 package com.gregschoeninger.battleboats;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -25,6 +27,7 @@ public class GameScreen extends GLScreen {
 	private static Battleboats game;
 	private static ProgressDialog activityIndicator;
 	public static boolean hasFired = false;
+	public static Set<Boat> sunkenShips;
 	
 	public GameScreen(Battleboats g, String speechFile, String accessToken) {
 		super(g);
@@ -35,6 +38,7 @@ public class GameScreen extends GLScreen {
 		renderer = new GameRenderer(glGraphics, batcher, map);
 		touchPoint = new Vector2();
 		speechConverter = new SpeechConverter(speechFile, accessToken);
+		sunkenShips = new HashSet<Boat>();
 	}
 
 	@Override
@@ -124,6 +128,7 @@ public class GameScreen extends GLScreen {
 	        	});
 			}
 			hasFired = true;
+			checkGameOver();
 		} else {
         	game.runOnUiThread(new Runnable() {
         	    public void run() {
@@ -192,10 +197,10 @@ public class GameScreen extends GLScreen {
     	        }, 
     	        1500 
     	);
+    	checkGameOver();
 	}
 	
 	private void updateOtherTurn(float deltaTime) {
-		
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
@@ -206,6 +211,29 @@ public class GameScreen extends GLScreen {
 	        }
 	        	
 		}
+	}
+	
+	private static void checkGameOver() {
+		// check what they hit
+		for (Boat b : Map.myBoats) {
+			int boatLength = b.boatType.size;
+			for (GridSpace g : b.getGridSpaces(Map.myGridSpaces)) {
+				if (g.state == GridSpace.HIT) boatLength--;
+			}
+			if (boatLength == 0) Log.d(Battleboats.DEBUG_TAG, "They sunk: "+b);
+			
+		}
+		
+		//check what we hit
+		for (Boat b : Map.theirBoats) {
+			int boatLength = b.boatType.size;
+			for (GridSpace g : b.getGridSpaces(Map.theirGridSpaces)) {
+				if (g.state == GridSpace.HIT) boatLength--;
+			}
+			if (boatLength == 0) sunkenShips.add(b);
+		}
+		
+		for (Boat b : sunkenShips) Log.d(Battleboats.DEBUG_TAG, "We sunk: "+b);
 	}
 	
 	private void updatePaused(float deltaTime) {
