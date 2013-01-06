@@ -112,6 +112,12 @@ public class GameScreen extends GLScreen {
 	    		} else {
 	    			Map.theirGridSpaces[c.row][c.col].state = GridSpace.HIT;
 	    		}
+			} else {
+	        	game.runOnUiThread(new Runnable() {
+	        	    public void run() {
+	        	    	activityIndicator.setMessage("Square already selected, try again.");
+	        	    }
+	        	});
 			}
 			hasFired = true;
 		} else {
