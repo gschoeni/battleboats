@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	Log.d(Battleboats.DEBUG_TAG, accessToken);
+    	Log.d(Battleboats.DEBUG_TAG, "Access token: "+accessToken);
     }
     
     private class OauthRequest extends AsyncTask<Void, Void, String> {
@@ -66,6 +66,7 @@ public class MainActivity extends Activity {
             HttpURLConnection oauth = null;
             String token = "?";
             try {
+            	Log.d(Battleboats.DEBUG_TAG, "Fetching access token");
                 oauth = (HttpURLConnection) new URL(OAUTH_TOKEN_URL).openConnection();
                 oauth.setDoOutput(true);
                 oauth.setChunkedStreamingMode(0);

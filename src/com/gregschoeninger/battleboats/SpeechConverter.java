@@ -26,7 +26,6 @@ public class SpeechConverter {
 
     public String accessToken;
     public String text;
-    public boolean isRecording;
     MediaRecorder recorder;
     
     public SpeechConverter(String file, String accessToken) {
@@ -36,18 +35,25 @@ public class SpeechConverter {
     
 
     public void buttonPressed() {   
-    	Log.d(Battleboats.DEBUG_TAG, "Clicked!");
-        if (isRecording) {
-            stopRecording();
-            convertSpeechToText();
-        } else {
-            setupRecorder();
-            startRecording();
-        }
+    	Log.d(Battleboats.DEBUG_TAG, "Clicked! Start Recording.");
+    	setupRecorder();
+        startRecording();
+    	
+    	new java.util.Timer().schedule( 
+    	        new java.util.TimerTask() {
+    	            @Override
+    	            public void run() {
+    	            	Log.d(Battleboats.DEBUG_TAG, "STOP Recording.");
+    	            	stopRecording();
+    	                convertSpeechToText();
+    	            }
+    	        }, 
+    	        3000 
+    	);
+
     }
 
     private void setupRecorder() {
-        isRecording = false;
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
@@ -57,7 +63,6 @@ public class SpeechConverter {
     }
 
     private void startRecording() {
-        isRecording = true;
         try {
             recorder.prepare();
         } catch (IllegalStateException e) {
@@ -71,7 +76,6 @@ public class SpeechConverter {
     }
 
     private void stopRecording() {
-        isRecording = false;
         recorder.stop();
         recorder.reset();
     }
