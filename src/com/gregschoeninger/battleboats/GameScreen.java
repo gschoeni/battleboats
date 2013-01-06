@@ -115,15 +115,28 @@ public class GameScreen extends GLScreen {
 			}
 			hasFired = true;
 		} else {
-			// reset
+        	game.runOnUiThread(new Runnable() {
+        	    public void run() {
+        	    	activityIndicator.setMessage("Unknown target, try again.");
+        	    }
+        	});
+
 		}
 
-		
-		game.runOnUiThread(new Runnable() {
-    	    public void run() {
-    	    	activityIndicator.hide();
-    	    }
-		});
+    	new java.util.Timer().schedule( 
+    	        new java.util.TimerTask() {
+    	            @Override
+    	            public void run() {
+    	            	game.runOnUiThread(new Runnable() {
+    		        	    public void run() {
+    		        	    	activityIndicator.hide();
+    		        	    }
+    		        	});
+    	            }
+    	        }, 
+    	        2000 
+    	);		
+
 	}
 	
 	public static void playAutoTurn() {
