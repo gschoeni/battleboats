@@ -37,9 +37,23 @@ public class GameRenderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		batcher.beginBatch(Assets.background);
 		
-		batcher.drawSprite(cam.position.x, cam.position.y,
-                FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 
-                Assets.backgroundRegion);
+		switch(map.state) {
+			case Map.GAME_READY:
+				batcher.drawSprite(cam.position.x, cam.position.y,
+		                FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 
+		                Assets.backgroundReady);
+				break;
+			case Map.GAME_ATTACK:
+				batcher.drawSprite(cam.position.x, cam.position.y,
+		                FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 
+		                Assets.backgroundAttack);
+				break;
+			case Map.GAME_OTHER_TURN:
+				batcher.drawSprite(cam.position.x, cam.position.y,
+		                FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 
+		                Assets.backgroundOtherTurn);
+				break;
+		}
 		
 		batcher.endBatch();
 	}
@@ -50,7 +64,6 @@ public class GameRenderer {
         
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         batcher.beginBatch(Assets.foregroundItems);
-        
         //renderDebugSquares();
         renderBoats();
         
@@ -63,16 +76,17 @@ public class GameRenderer {
 			
 			switch(b.boatType.size) {
 				case 2:
-					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.patrol_boat);
+					
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, b.orientation == BoatOrientation.VERTICAL ? Assets.patrol_boat_vertical : Assets.patrol_boat_horizontal);
 					break;
 				case 3:
-					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.submarine);
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, b.orientation == BoatOrientation.VERTICAL ? Assets.submarine_vertical : Assets.submarine_horizontal);
 					break;
 				case 4:
-					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.destroyer);
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, b.orientation == BoatOrientation.VERTICAL ? Assets.destroyer_vertical : Assets.destroyer_horizontal);
 					break;
 				case 5:
-					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, Assets.aircraft);
+					batcher.drawSprite(b.getLowerLeftX(), b.getLowerLeftY(), b.width, b.height, b.orientation == BoatOrientation.VERTICAL ? Assets.aircraft_vertical : Assets.aircraft_horizontal);
 					break;
 			}
 		}

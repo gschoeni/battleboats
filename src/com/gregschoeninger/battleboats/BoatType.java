@@ -5,16 +5,11 @@ import android.util.Log;
 import com.badlogic.androidgames.framework.gl.TextureRegion;
 
 public enum BoatType {
-	PATROL_BOAT(2, Assets.patrol_boat), SUBMARINE(3, Assets.submarine), DESTROYER(4, Assets.destroyer), AIRCRAFT_CARRIER(5, Assets.aircraft);
+	PATROL_BOAT(2), SUBMARINE(3), DESTROYER(4), AIRCRAFT_CARRIER(5);
 	public int size;
-	public TextureRegion asset = Assets.submarine;
 	
-	private BoatType(int size, TextureRegion asset) {
+	private BoatType(int size) {
 		this.size = size;
-		this.asset = Assets.submarine;
 	}
-	
-	public String toString() {
-		return "Asset: "+this.asset;
-	}
+
 }

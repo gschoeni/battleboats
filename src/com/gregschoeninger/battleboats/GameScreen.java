@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.gl.Camera2D;
 import com.badlogic.androidgames.framework.gl.SpriteBatcher;
@@ -19,6 +21,7 @@ public class GameScreen extends GLScreen {
 	private GameRenderer renderer;
 	private Map map;
 	private Vector2 touchPoint;
+	private SpeechConverter speechConverter;
 	
 	
 	public GameScreen(Battleboats game) {
@@ -28,33 +31,54 @@ public class GameScreen extends GLScreen {
 		map = new Map();
 		renderer = new GameRenderer(glGraphics, batcher, map);
 		touchPoint = new Vector2();
+		speechConverter = new SpeechConverter();
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		updateSetup(deltaTime);
+		switch(map.state) {
+			case Map.GAME_READY:
+				updateSetup(deltaTime);
+				break;
+			case Map.GAME_ATTACK:
+				updateAttack(deltaTime);
+				break;
+			case Map.GAME_OTHER_TURN:
+				updateOtherTurn(deltaTime);
+				break;
+		}
+		
 	}
 	
 	private void updateSetup(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
+	        
 	        // the points returned are backward in openGL land so we need to convert them to our coordinate space
 	        touchPoint = touchPoint.getGLCoords(glGraphics, touchPoint, event.x, event.y, GameRenderer.FRUSTUM_WIDTH, GameRenderer.FRUSTUM_HEIGHT);
+	        if (touchedReadyButton(touchPoint)) {
+	        	map.state = Map.GAME_ATTACK;
+	        	break;
+	        }
+	        	
 	        map.checkDraggingBoat(event, touchPoint);
 		}
 	}
 	
-	private void updateReady(float deltaTime) {
+	private void updateAttack(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
 	        if(event.type != TouchEvent.TOUCH_DOWN) return;
+	        if (touchedAttackButton(touchPoint)) {
+	        	speechConverter.buttonPressed();
+	        }
 	    }
 		
 	}
 	
-	private void updateRunning(float deltaTime) {
+	private void updateOtherTurn(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 		for(int i = 0; i < touchEvents.size(); i++) {
 	        TouchEvent event = touchEvents.get(i);
@@ -80,7 +104,13 @@ public class GameScreen extends GLScreen {
 		glGame.finish();
 	}
 	
+	private boolean touchedReadyButton(Vector2 p) {
+		return p.x > 225 && p.y < 80;
+	}
 	
+	private boolean touchedAttackButton(Vector2 p) {
+		return p.x < 100 && p.y < 80;
+	}
 
 	@Override
 	public void present(float deltaTime) {

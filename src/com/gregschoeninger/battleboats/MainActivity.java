@@ -21,11 +21,6 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    public void buttonPressed(View view) {        
-    	Log.d(Battleboats.DEBUG_TAG, "TEST");
-    	
-    }
-    
     public void playGame(View view) {        
     	Intent i = new Intent(this, Battleboats.class);
     	startActivity(i);

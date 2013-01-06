@@ -2,7 +2,10 @@ package com.gregschoeninger.battleboats;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.GameObject;
+import com.badlogic.androidgames.framework.gl.TextureRegion;
 
 public class Boat extends GameObject {
 	
@@ -17,8 +20,10 @@ public class Boat extends GameObject {
 	public int state;
 	public static int VALID_SPACE = 0;
 	public static int IS_BEING_DRAGGED = 1;
+	public TextureRegion horizontalTexture;
+	private TextureRegion verticalTexture;
 	
-	public Boat(int row, int col, BoatType b, BoatOrientation o) {
+	public Boat(int row, int col, BoatType b, BoatOrientation o, TextureRegion horizontal, TextureRegion vertical) {
 		super(row*GridSpace.WIDTH + Map.x_offset, col*GridSpace.HEIGHT+Map.y_offset, GridSpace.WIDTH, GridSpace.HEIGHT);
 		this.boatType = b;
 		this.orientation = o;
@@ -27,6 +32,9 @@ public class Boat extends GameObject {
 		this.width = widthFromOrientation(o);
 		this.height = heightFromOrientation(o);
 		this.state = VALID_SPACE;
+		Log.d(Battleboats.DEBUG_TAG, "Horizontal: "+horizontal);
+		this.horizontalTexture = horizontal;
+		this.verticalTexture = vertical;
 	}
 	
 	private int widthFromOrientation(BoatOrientation o) {
@@ -76,6 +84,14 @@ public class Boat extends GameObject {
 	public void setLocation(float x, float y) {
 		position.set(x, y);
     	bounds.setLowerLeft(x, y);
+	}
+	
+	public TextureRegion getTextureRegion() {
+		if (orientation == BoatOrientation.VERTICAL) {
+			return verticalTexture;
+		} else {
+			return horizontalTexture;
+		}
 	}
 	
 }

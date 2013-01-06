@@ -11,11 +11,12 @@ import com.badlogic.androidgames.framework.math.Vector2;
 
 public class Map {
 	
-	public static final int GAME_SETUP = 0;
-	public static final int GAME_PLAYING_P1 = 1;
-	public static final int GAME_PLAYING_P2 = 2;
+	public static final int GAME_READY = 0;
+	public static final int GAME_ATTACK = 1;
+	public static final int GAME_OTHER_TURN = 2;
 	public static final int GAME_PAUSED = 3;
 	public static final int GAME_OVER = 4;
+	public int state;
 	public static GridSpace[][] gridSpaces;
 	public List<Boat> boats;
 	
@@ -27,6 +28,7 @@ public class Map {
 	public Map() {
 		generateGridSpaces();
 		generateBoats();
+		state = GAME_READY;
 	}
 	
 	private void generateGridSpaces() {
@@ -45,28 +47,28 @@ public class Map {
 		boats = new ArrayList<Boat>();
 		
 		// one patrol boat
-		Boat patrol1 = new Boat(2, 3, BoatType.PATROL_BOAT, BoatOrientation.VERTICAL);
+		Boat patrol1 = new Boat(2, 3, BoatType.PATROL_BOAT, BoatOrientation.VERTICAL, Assets.patrol_boat_horizontal, Assets.patrol_boat_vertical);
 		for(GridSpace g : patrol1.getGridSpaces()) {
 			g.boat = patrol1;
 		}
 		boats.add(patrol1);
 		
 		// one submarine
-		Boat submarine = new Boat(0, 0, BoatType.SUBMARINE, BoatOrientation.HORIZONTAL);
+		Boat submarine = new Boat(0, 0, BoatType.SUBMARINE, BoatOrientation.HORIZONTAL, Assets.submarine_horizontal, Assets.submarine_vertical);
 		for(GridSpace g : submarine.getGridSpaces()) {
 			g.boat = submarine;
 		}
 		boats.add(submarine);
 		
 		// one destroyer
-		Boat destroyer = new Boat(6, 1, BoatType.DESTROYER, BoatOrientation.VERTICAL);
+		Boat destroyer = new Boat(6, 1, BoatType.DESTROYER, BoatOrientation.VERTICAL, Assets.destroyer_horizontal, Assets.destroyer_vertical);
 		for(GridSpace g : destroyer.getGridSpaces()) {
 			g.boat = destroyer;
 		}
 		boats.add(destroyer);
 		
 		// aircraft carrier
-		Boat aircraft = new Boat(1, 6, BoatType.AIRCRAFT_CARRIER, BoatOrientation.HORIZONTAL);
+		Boat aircraft = new Boat(1, 6, BoatType.AIRCRAFT_CARRIER, BoatOrientation.HORIZONTAL, Assets.aircraft_horizontal, Assets.aircraft_vertical);
 		for(GridSpace g : aircraft.getGridSpaces()) {
 			g.boat = aircraft;
 		}
@@ -76,6 +78,7 @@ public class Map {
 	public void checkDraggingBoat(TouchEvent event, Vector2 touchPoint) {
 		float x = touchPoint.x + GridSpace.WIDTH/2;
 		float y = touchPoint.y + GridSpace.HEIGHT/2;
+		
 		for(Boat b : boats) {
 			if (event.type == TouchEvent.TOUCH_DOWN && OverlapTester.pointInRectangle(b.bounds, x, y)) {
 				Log.d(Battleboats.DEBUG_TAG, "TOUCHED "+b.bounds);
@@ -86,6 +89,21 @@ public class Map {
 				b.setLocation(x, y);
 			} else if (event.type == TouchEvent.TOUCH_UP && b.state == Boat.IS_BEING_DRAGGED) {
 				dropBoat(b);
+			}
+		}
+	}
+	
+	public void checkRotateBoat(TouchEvent event, Vector2 touchPoint) {
+		float x = touchPoint.x + GridSpace.WIDTH/2;
+		float y = touchPoint.y + GridSpace.HEIGHT/2;
+		
+		for(Boat b : boats) {
+			if (event.type == TouchEvent.TOUCH_DOWN && OverlapTester.pointInRectangle(b.bounds, x, y)) {
+				b.orientation = BoatOrientation.VERTICAL;
+				int temp = b.height;
+				b.height = b.width;
+				b.width = temp;
+				break;
 			}
 		}
 	}
